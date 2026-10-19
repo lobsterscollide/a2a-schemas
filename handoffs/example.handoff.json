@@ -1,0 +1,32 @@
+{
+  "handoff_id": "00000000-0000-4000-8000-000000000001",
+  "from_agent": "cc",
+  "to_agent": "loa",
+  "session_at": "2026-01-01T00:00:00Z",
+  "completed": [
+    {
+      "id": "cc.add_action_sysctl_kptr_restrict",
+      "description": "Added sysctl.set_kptr_restrict to the hardened-api action registry",
+      "category": "sysctl"
+    }
+  ],
+  "pending_for_recipient": [
+    {
+      "id": "loa.apply_sysctl_kptr_restrict",
+      "description": "Dry-run, then apply sysctl.set_kptr_restrict via POST /api/v1/harden",
+      "priority": "medium",
+      "category": "sysctl"
+    }
+  ],
+  "pending_for_sender": [],
+  "system_state": {
+    "lynis_score": 70,
+    "overall_check_severity": "medium",
+    "notes": "Example handoff — values are illustrative"
+  },
+  "active_boundary_ids": [
+    "a1b2c3d4-0001-4000-8000-cc0000000001",
+    "a1b2c3d4-0002-4000-8000-loa000000002"
+  ],
+  "contract_version": "8.3.1"
+}

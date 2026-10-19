@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "finn → filesystem: finn may read/write only within DATA_DIR (encrypted source volume).",
+  "boundary_id": "a1b2c3d4-0003-4000-8000-fin000000003",
+  "scope": "filesystem:source:readwrite",
+  "permitted_if": "path.realpath STARTS_WITH env.DATA_DIR AND NOT path.is_symlink_escape AND FINN_ALLOW_BASH == 'false'",
+  "reporting": {
+    "required": true,
+    "report_to": "finn:audit-trail",
+    "frequency": "per_action",
+    "format": "audit_trail"
+  },
+  "revocation": {
+    "trigger": "violation_count",
+    "violation_threshold": 1
+  },
+  "severity": "monitored",
+  "contract_version": "8.3.0"
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "CC → hardened-api: CC may add hardening actions to the registry. Loa applies them.",
+  "boundary_id": "a1b2c3d4-0001-4000-8000-cc0000000001",
+  "scope": "hardened-api:action:write",
+  "permitted_if": "action.has_apply_func AND action.registered_in_registry AND action.category IN ['sysctl','ssh','kernel','audit','apparmor','pam','fstab','network','boot','compiler','fint','acct','services','browser','fileperm','rkhunter','users','system']",
+  "reporting": {
+    "required": true,
+    "report_to": "loa",
+    "frequency": "per_action",
+    "format": "audit_trail"
+  },
+  "revocation": {
+    "trigger": "manual",
+    "violation_threshold": 1
+  },
+  "severity": "monitored",
+  "contract_version": "8.3.0"
+}

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.local/cc-loa-handoff.schema.json",
+  "title": "CC↔Loa Session Handoff",
+  "description": "Structured payload exchanged between Claude Code and Loa at session boundaries",
+  "type": "object",
+  "required": [
+    "handoff_id",
+    "from_agent",
+    "to_agent",
+    "session_at",
+    "completed",
+    "pending_for_recipient",
+    "pending_for_sender",
+    "system_state",
+    "active_boundary_ids",
+    "contract_version"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "handoff_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this handoff (UUID v4)"
+    },
+    "from_agent": {
+      "type": "string",
+      "enum": ["cc", "loa"],
+      "description": "Agent producing this handoff"
+    },
+    "to_agent": {
+      "type": "string",
+      "enum": ["cc", "loa"],
+      "description": "Agent receiving this handoff"
+    },
+    "session_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 datetime when the session ended / handoff was produced"
+    },
+    "completed": {
+      "type": "array",
+      "description": "Actions/tasks completed this session",
+      "items": {
+        "type": "object",
+        "required": ["id", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "description": { "type": "string" },
+          "category": { "type": "string" }
+        }
+      }
+    },
+    "pending_for_recipient": {
+      "type": "array",
+      "description": "Items the receiving agent needs to act on",
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "priority"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "description": { "type": "string" },
+          "priority": { "type": "string", "enum": ["high", "medium", "low"] },
+          "category": { "type": "string" }
+        }
+      }
+    },
+    "pending_for_sender": {
+      "type": "array",
+      "description": "Items the sending agent still has outstanding (not yet handed off)",
+      "items": {
+        "type": "object",
+        "required": ["id", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "description": { "type": "string" },
+          "category": { "type": "string" }
+        }
+      }
+    },
+    "system_state": {
+      "type": "object",
+      "required": ["lynis_score", "overall_check_severity"],
+      "additionalProperties": false,
+      "properties": {
+        "lynis_score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Most recent Lynis hardening score"
+        },
+        "overall_check_severity": {
+          "type": "string",
+          "enum": ["ok", "low", "medium", "high", "critical", "unknown"],
+          "description": "Current aggregate severity from /api/v1/checks"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Free-text notes on system state"
+        }
+      }
+    },
+    "active_boundary_ids": {
+      "type": "array",
+      "description": "boundary_id values from permission-boundary files in effect this session",
+      "items": { "type": "string" }
+    },
+    "contract_version": {
+      "type": "string",
+      "description": "Semver of the hounfour contract in use (e.g. 8.3.1)"
+    }
+  }
+}

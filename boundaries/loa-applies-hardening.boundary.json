@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Loa → hardened-api: Loa may POST to /api/v1/harden to apply registered actions.",
+  "boundary_id": "a1b2c3d4-0002-4000-8000-loa000000002",
+  "scope": "hardened-api:harden:apply",
+  "permitted_if": "request.header['X-Harden-Confirm'] == 'yes' AND request.body.actions ALL_IN hardened-api.registered_action_ids AND request.auth == 'Bearer ' + env.HARDENED_API_HARDEN_KEY",
+  "reporting": {
+    "required": true,
+    "report_to": "hardened-api:audit-log",
+    "frequency": "per_action",
+    "format": "audit_trail"
+  },
+  "revocation": {
+    "trigger": "violation_count",
+    "violation_threshold": 3
+  },
+  "severity": "monitored",
+  "contract_version": "8.3.0"
+}
